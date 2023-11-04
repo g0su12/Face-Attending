@@ -16,7 +16,6 @@ import {Backdrop, CircularProgress} from "@mui/material";
 import {useAuth} from "../../AuthContext"
 import {auth} from "../../firebase";
 import {useNavigate} from "react-router-dom";
-import {toast} from "react-toastify";
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ export default function LoginView() {
 
         <TextField
           name="password"
-          label="Password"
+          label="Mật khẩu"
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -75,7 +74,7 @@ export default function LoginView() {
         color="inherit"
         onClick={handleSubmit}
       >
-        Login
+        Đăng nhập
       </LoadingButton>
     </>
   );

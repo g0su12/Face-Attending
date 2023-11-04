@@ -7,7 +7,6 @@ import {toast} from "react-toastify";
 export function PrivateRoute({ children }) {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchPersonalInfo = async () => {
       if (currentUser) {
@@ -27,7 +26,7 @@ export function PrivateRoute({ children }) {
     };
 
     fetchPersonalInfo().then(r => {});
-  }, [currentUser, navigate]);
+  }, []);
 
   return currentUser ? children : navigate("/login")
 }

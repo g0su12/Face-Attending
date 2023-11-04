@@ -95,18 +95,14 @@ export default function UserPage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Người dùng</Typography>
 
         <Button onClick={() => setOpenModal(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
           New User
         </Button>
       </Stack>
-      <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="MUI Form" actions={
-        <Button color="primary">
-          Submit
-        </Button>
-      }>
-        <FormAddUser/>
+      <CustomModal open={openModal} title="Thêm người dùng mới">
+        <FormAddUser handleClose={() => setOpenModal(false)} />
       </CustomModal>
       <Card>
         <UserTableToolbar
@@ -127,10 +123,11 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
+                  { id: 'email', label: 'Email' },
+                  { id: 'id', label: 'Id' },
                   { id: 'role', label: 'Role' },
                   { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'gender', label: 'Gender' },
                   { id: '' },
                 ]}
               />

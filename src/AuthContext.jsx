@@ -4,10 +4,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  sendPasswordResetEmail
+
 } from "firebase/auth";
 import {useNavigate} from "react-router-dom";
-import {getDatabase, ref, child, get} from "firebase/database";
 import {toast} from "react-toastify";
 
 const AuthContext = React.createContext(undefined);
@@ -18,20 +17,28 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
   const [currentUser, setCurrentUser] = useState();
+  const [loginInfo, setLoginInfo] = useState({});
   const [personalInfo, setPersonalInfo] = useState();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  function signup(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password);
+  async function signup(auth, email, password) {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        await login(auth, loginInfo.email, loginInfo.password).then(() => {});
+        return user.uid;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   }
 
   function login(auth, email, password) {
     return signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const {user} = userCredential;
+      .then(() => {
+        setLoginInfo({"email": email, "password": password});
       })
       .catch((error) => {
         console.log(error);
@@ -51,18 +58,6 @@ export function AuthProvider({children}) {
       });
   }
 
-  function resetPassword(email) {
-    return auth.sendPasswordResetEmail(email);
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email);
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password);
-  }
-
   useEffect(() => {
     return auth.onAuthStateChanged(user => {
       setCurrentUser({user});
@@ -71,16 +66,12 @@ export function AuthProvider({children}) {
   }, [])
 
   const value = {
+    loginInfo,
     currentUser,
     personalInfo,
-    isAdmin,
-    setIsAdmin,
     login,
     signup,
     logout,
-    resetPassword,
-    updateEmail,
-    updatePassword
   }
   return (
     <AuthContext.Provider value={value}>
