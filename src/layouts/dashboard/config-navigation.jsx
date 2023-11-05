@@ -13,12 +13,12 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
+    title: 'Người dùng',
     path: '/user',
     icon: icon('ic_user'),
   },
   {
-    title: 'product',
+    title: 'Khoá học',
     path: '/products',
     icon: icon('ic_cart'),
   },
@@ -31,11 +31,6 @@ const navConfig = [
     title: 'login',
     path: '/login',
     icon: icon('ic_lock'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic_disabled'),
   },
 ];
 

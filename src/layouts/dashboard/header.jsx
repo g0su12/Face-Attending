@@ -4,44 +4,77 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { useTheme } from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
-import { useResponsive } from 'src/hooks/use-responsive';
+import {useResponsive} from 'src/hooks/use-responsive';
 
-import { bgBlur } from 'src/theme/css';
+import {bgBlur} from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
 
 import Searchbar from './common/searchbar';
-import { NAV, HEADER } from './config-layout';
+import {HEADER, NAV} from './config-layout';
 import AccountPopover from './common/account-popover';
 import LanguagePopover from './common/language-popover';
 import NotificationsPopover from './common/notifications-popover';
+import {getDatabase, onValue, ref} from "firebase/database";
+import {useEffect, useState} from "react";
 
 // ----------------------------------------------------------------------
 
-export default function Header({ onOpenNav }) {
+export default function Header({onOpenNav}) {
   const theme = useTheme();
+  const dbRef = getDatabase();
+  const frRef = ref(dbRef, 'FaceRequests');
+  const [listFr, setListFr] = useState([]);
+  const studentsRef = ref(dbRef, 'Students');
+  const [listStudents, setListStudents] = useState([]);
 
+  useEffect(() => {
+    const frSub = onValue(frRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const frData = Object.keys(snapshot.val()).map((key) => ({
+          id: key,
+          ...snapshot.val()[key],
+        }));
+        setListFr(frData);
+      }
+    });
+
+    const studentsSub = onValue(studentsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const studentsData = Object.keys(snapshot.val()).map((key) => ({
+          id: key,
+          ...snapshot.val()[key],
+        }));
+        setListStudents(studentsData);
+      }
+    });
+
+    return () => {
+      frSub();
+      studentsSub();
+    };
+  }, []);
   const lgUp = useResponsive('up', 'lg');
 
   const renderContent = (
     <>
       {!lgUp && (
-        <IconButton onClick={onOpenNav} sx={{ mr: 1 }}>
-          <Iconify icon="eva:menu-2-fill" />
+        <IconButton onClick={onOpenNav} sx={{mr: 1}}>
+          <Iconify icon="eva:menu-2-fill"/>
         </IconButton>
       )}
 
-      <Searchbar />
+      <Searchbar/>
 
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{flexGrow: 1}}/>
 
       <Stack direction="row" alignItems="center" spacing={1}>
-        <LanguagePopover />
-        <NotificationsPopover />
-        <AccountPopover />
+        <LanguagePopover/>
+        <NotificationsPopover listsFr={listFr} listStudents={listStudents}/>
+        <AccountPopover/>
       </Stack>
     </>
   );
@@ -67,7 +100,7 @@ export default function Header({ onOpenNav }) {
       <Toolbar
         sx={{
           height: 1,
-          px: { lg: 5 },
+          px: {lg: 5},
         }}
       >
         {renderContent}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -9,8 +9,6 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-
-import { users } from 'src/_mock/user';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -23,6 +21,8 @@ import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import CustomModal from "../../../components/Modal/CustomModal";
 import FormAddUser from "../../../components/form/FormAddUser";
+import {getDatabase, onValue, ref} from "firebase/database";
+import {deleteUserByUid} from "../../../common/services/services";
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +35,25 @@ export default function UserPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openModal, setOpenModal] = useState(false);
 
+  const dbRef = getDatabase();
+  const usersRef = ref(dbRef, 'Users');
+  const [listUsers, setListUsers] = useState([]);
+
+  useEffect(() => {
+    const usersSub = onValue(usersRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const usersData = Object.keys(snapshot.val()).map((key) => ({
+          id: key,
+          ...snapshot.val()[key],
+        }));
+        setListUsers(usersData);
+      }
+    });
+
+    return () => {
+      usersSub();
+    };
+  }, []);
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -45,7 +64,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = listUsers.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -85,10 +104,11 @@ export default function UserPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: listUsers,
     comparator: getComparator(order, orderBy),
     filterName,
   });
+
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -98,7 +118,7 @@ export default function UserPage() {
         <Typography variant="h4">Người dùng</Typography>
 
         <Button onClick={() => setOpenModal(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
+          Thêm người dùng mới
         </Button>
       </Stack>
       <CustomModal open={openModal} title="Thêm người dùng mới">
@@ -117,17 +137,14 @@ export default function UserPage() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={listUsers.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
                   { id: 'email', label: 'Email' },
-                  { id: 'id', label: 'Id' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'gender', label: 'Gender' },
+                  { id: 'id', label: 'Id người dùng' },
+                  { id: 'role', label: 'Vai trò' },
                   { id: '' },
                 ]}
               />
@@ -137,20 +154,20 @@ export default function UserPage() {
                   .map((row) => (
                     <UserTableRow
                       key={row.id}
-                      name={row.name}
+                      uid={row.userId}
+                      email={row.email}
+                      id={row.id}
                       role={row.role}
-                      status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
+                      avatarUrl={row.avatarUrl ? row.avatarUrl : `/assets/images/avatars/avatar_2.jpg`}
                       selected={selected.indexOf(row.name) !== -1}
+                      handleDeleteUser={deleteUserByUid}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, listUsers.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -162,7 +179,7 @@ export default function UserPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={listUsers.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

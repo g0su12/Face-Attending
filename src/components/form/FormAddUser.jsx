@@ -21,7 +21,7 @@ import {useAuth} from "../../AuthContext";
 import {getAuth} from "firebase/auth";
 import {useFormik} from "formik";
 import {validate} from "../../common/Schema/userSchema";
-import {writeStudentData, writeTeacherData, writeUserData} from "../../common/function/common";
+import {writeStudentData, writeTeacherData, writeUserData} from "../../common/services/services";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -37,20 +37,29 @@ const MenuProps = {
 function FormAddUser({handleClose}) {
   const dbRef = getDatabase();
   const coursesRef = ref(dbRef, 'Courses');
+  const usersRef = ref(dbRef, 'Users');
   const { signup } = useAuth();
   const [listCourses, setListCourses] = useState([]);
+  const [listUsers, setListUsers] = useState([]);
 
   useEffect(() => {
     // Use onValue to listen for changes in the Courses reference
-    const unsubscribe = onValue(coursesRef, (snapshot) => {
+    const coursesSub = onValue(coursesRef, (snapshot) => {
       if (snapshot.exists()) {
         const coursesData = snapshot.val();
         setListCourses(coursesData);
       }
     });
+    const usersSub = onValue(usersRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const usersData = snapshot.val();
+        setListUsers(usersData);
+      }
+    });
 
     return () => {
-      unsubscribe();
+      coursesSub();
+      usersSub();
     };
   }, []);
 
@@ -88,6 +97,7 @@ function FormAddUser({handleClose}) {
         const {dob, mainClass, ...teacherData} = userData;
         writeTeacherData(teacherData);
       }
+      handleClose();
     },
   });
 
@@ -226,10 +236,10 @@ function FormAddUser({handleClose}) {
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 1}}/>
       <Stack direction="row" spacing={2}>
         <Button type="submit" variant="contained" color="primary">
-          Submit
+          Thêm
         </Button>
         <Button variant="contained" color="error" onClick={handleClose}>
-          Cancel
+          Huỷ
         </Button>
       </Stack>
     </form>
