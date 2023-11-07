@@ -21,7 +21,7 @@ import {useAuth} from "../../AuthContext";
 import {getAuth} from "firebase/auth";
 import {useFormik} from "formik";
 import {validate} from "../../common/Schema/userSchema";
-import {writeStudentData, writeTeacherData, writeUserData} from "../../common/services/services";
+import {insertStudentToCourse, writeStudentData, writeTeacherData, writeUserData} from "../../common/services/services";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -81,7 +81,16 @@ function FormAddUser({handleClose}) {
     validate,
     onSubmit: async (values) => {
       const { confirmPassword, password, role, ...userData } = values;
+      userData.courses = userData.courses.reduce((acc, course) => {
+        const [courseCode, isSelected] = course.split(': ');
+        acc[courseCode] = isSelected === "true";
+        return acc;
+      }, {});
 
+      // insert student to course students db
+      values.courses.map(course => {
+        insertStudentToCourse(course.split(":")[0], values.id, values.photo, values.name);
+      })
       const dobParts = userData.dob.split('-');
       if (dobParts.length === 3) {
         userData.dob = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
@@ -193,7 +202,7 @@ function FormAddUser({handleClose}) {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Main Class"
+            label="Lớp hành chính"
             name="mainClass"
             value={formik.values.mainClass}
             onChange={formik.handleChange}
@@ -216,7 +225,7 @@ function FormAddUser({handleClose}) {
             renderValue={(selected) => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {selected.map((value) => (
-                  <Chip key={value} label={value} />
+                  <Chip key={value} label={value.split(":")[0]} />
                 ))}
               </Box>
             )}
@@ -225,7 +234,7 @@ function FormAddUser({handleClose}) {
             {Object.entries(listCourses).map(([key, value]) => (
               <MenuItem
                 key={key}
-                value={key}
+                value={`${key}: ${true}`}
               >
                 {key}: {value.name}
               </MenuItem>

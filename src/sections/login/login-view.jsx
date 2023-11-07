@@ -44,7 +44,7 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <TextField name="email" label="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
 
         <TextField
           name="password"
@@ -64,7 +64,7 @@ export default function LoginView() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 3}}>Forgot your password?</Stack>
+      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 3}}>Quên mật khẩu?</Stack>
 
       <LoadingButton
         fullWidth
@@ -111,7 +111,7 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to Face Attendance</Typography>
+          <Typography variant="h4">Đăng nhập</Typography>
 
           <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 3}}/>
 

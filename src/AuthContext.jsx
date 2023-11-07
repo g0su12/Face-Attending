@@ -26,7 +26,7 @@ export function AuthProvider({children}) {
     return createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        await login(auth, loginInfo.email, loginInfo.password).then(() => {});
+        await login(auth, loginInfo.email, loginInfo.password);
         return user.uid;
       })
       .catch((error) => {

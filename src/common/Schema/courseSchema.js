@@ -18,6 +18,10 @@ export const validate = values => {
     errors.students = 'Vui lòng chọn các học sinh sẽ tham gia lớp học';
   }
 
+  if (!values.teacherId) {
+    errors.teacherId = 'Vui lòng chọn giáo viên cho lớp học';
+  }
+
   return errors;
 };
 

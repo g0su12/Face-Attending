@@ -7,6 +7,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
 import {useFormik} from "formik";
 import {validate} from "../../common/Schema/courseSchema";
+import {insertCourseToStudent, writeCourseData} from "../../common/services/services";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -25,8 +26,6 @@ function FormAddUser({handleClose}) {
   const [listStudents, setListStudents] = useState([]);
   const teachersRef = ref(dbRef, 'Teachers');
   const [listTeachers, setListTeachers] = useState([]);
-  const sessionsRef = ref(dbRef, 'Sessions');
-  const [listSessions, setListSessions] = useState([]);
 
   useEffect(() => {
     const studentsSub = onValue(studentRef, (snapshot) => {
@@ -48,20 +47,9 @@ function FormAddUser({handleClose}) {
       }
     });
 
-    const sessionsSub = onValue(sessionsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const sessionsData = Object.keys(snapshot.val()).map((key) => ({
-          id: key,
-          ...snapshot.val()[key],
-        }));
-        setListSessions(sessionsData);
-      }
-    });
-
     return () => {
       studentsSub();
       teachersSub();
-      sessionsSub();
     };
   }, []);
 
@@ -73,14 +61,28 @@ function FormAddUser({handleClose}) {
         numberCredits: 1,
         teacherId: '',
         students: [],
-        sessions: []
       },
     validate,
     onSubmit: async (values) => {
-      // insert user to Users table
-      // writeUserData(uid, values.id, values.email, values.role);
+      // insert course to student courses db
+      values.students.map((student) => {
+        insertCourseToStudent(student, values.id)
+      });
+
+      const studentsData = listStudents.map(({ id, name, photo }) => ({ id, name, photo }));
+      values.students = studentsData.filter(student => values.students.includes(student.id));
+      const courseData = {...values};
+      courseData.students = courseData.students.reduce((acc, student) => {
+        acc[student.id] = {
+          id: student.id,
+          name: student.name,
+          photo: student.photo
+        };
+        return acc;
+      }, {})
+
+      writeCourseData(courseData);
       handleClose();
-      console.log(values)
     },
   });
 
@@ -136,8 +138,8 @@ function FormAddUser({handleClose}) {
             input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
             renderValue={(selected) => (
               <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value}/>
+                {selected.map((value, index) => (
+                  <Chip key={index} label={value.toString()}/>
                 ))}
               </Box>
             )}
@@ -155,36 +157,6 @@ function FormAddUser({handleClose}) {
           {formik.errors.students && formik.touched.students &&
             <FormHelperText error={formik.touched.students && Boolean(formik.errors.students)}>Vui lòng chọn các học
               sinh sẽ tham gia lớp học</FormHelperText>}
-        </Grid>
-        <Grid item width={300}>
-          <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Chọn tiết học:
-          </InputLabel>
-          <Select
-            label="Tiết học"
-            name="sessions"
-            multiple
-            value={formik.values.sessions}
-            onChange={formik.handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value}/>
-                ))}
-              </Box>
-            )}
-            MenuProps={MenuProps}
-          >
-            {Object.entries(listSessions).map(([key, value]) => (
-              <MenuItem
-                key={key}
-                value={`${value.id}`}
-              >
-                {value.id}
-              </MenuItem>
-            ))}
-          </Select>
         </Grid>
         <Grid item width={300}>
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -212,6 +184,9 @@ function FormAddUser({handleClose}) {
               </MenuItem>
             ))}
           </Select>
+          {formik.errors.teacherId && formik.touched.teacherId &&
+            <FormHelperText error={formik.touched.teacherId && Boolean(formik.errors.teacherId)}>Vui lòng chọn giáo viên
+              cho lớp học</FormHelperText>}
         </Grid>
       </Grid>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 1}}/>

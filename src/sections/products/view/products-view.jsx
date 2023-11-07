@@ -24,6 +24,7 @@ import FormAddUser from "../../../components/form/FormAddUser";
 import {getDatabase, onValue, ref} from "firebase/database";
 import {deleteUserByUid} from "../../../common/services/services";
 import FormAddCourse from "../../../components/form/FormAddCourse";
+import FormAddSession from "../../../components/form/FromAddSession";
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,8 @@ export default function CoursePage() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalCourse, setOpenModalCourse] = useState(false);
+  const [openModalSession, setOpenModalSession] = useState(false);
 
   const dbRef = getDatabase();
   const coursesRef = ref(dbRef, 'Courses');
@@ -119,12 +121,20 @@ export default function CoursePage() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Khoá học</Typography>
 
-        <Button onClick={() => setOpenModal(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          Thêm khoá học mới
-        </Button>
+        <Stack direction="row" spacing={3}>
+          <Button onClick={() => setOpenModalCourse(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+            Thêm khoá học
+          </Button>
+          <Button onClick={() => setOpenModalSession(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+            Thêm tiết học
+          </Button>
+        </Stack>
       </Stack>
-      <CustomModal open={openModal} title="Thêm người dùng mới">
-        <FormAddCourse handleClose={() => setOpenModal(false)} />
+      <CustomModal open={openModalCourse} title="Thêm khoá học">
+        <FormAddCourse handleClose={() => setOpenModalCourse(false)} />
+      </CustomModal>
+      <CustomModal open={openModalSession} title="Thêm tiết học">
+        <FormAddSession handleClose={() => setOpenModalSession(false)} />
       </CustomModal>
       <Card>
         <UserTableToolbar
