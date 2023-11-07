@@ -7,7 +7,7 @@ export const writeUserData = (userId, id, email, role) => {
     id: id,
     email: email,
     role: role,
-    userId: userId
+    uid: userId
   }).then(r => {
   });
 }

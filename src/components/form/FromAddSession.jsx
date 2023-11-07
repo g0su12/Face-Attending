@@ -88,7 +88,7 @@ function FormAddSession({handleClose}) {
       const sessionData = {...values}
       sessionData.students = listCourses.find(course => course.id === sessionData.courseId).students;
       for (const key in sessionData.students) {
-        sessionData.students[key] = " ";
+        sessionData.students[key] = "";
       }
       sessionData.endCheckInTime = sessionData.endCheckInTime.split("T").reverse().join(" ");
       sessionData.startCheckInTime = sessionData.startCheckInTime.split("T").reverse().join(" ");
