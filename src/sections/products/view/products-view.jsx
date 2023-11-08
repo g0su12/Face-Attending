@@ -20,7 +20,6 @@ import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import CustomModal from "../../../components/Modal/CustomModal";
-import FormAddUser from "../../../components/form/FormAddUser";
 import {getDatabase, onValue, ref} from "firebase/database";
 import {deleteUserByUid} from "../../../common/services/services";
 import FormAddCourse from "../../../components/form/FormAddCourse";

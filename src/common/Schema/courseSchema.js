@@ -1,4 +1,3 @@
-
 export const validate = values => {
   const errors = {};
 

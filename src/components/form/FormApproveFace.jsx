@@ -1,26 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   Button,
   Container,
 } from '@mui/material';
 import Stack from "@mui/material/Stack";
-import {getDatabase, ref} from "firebase/database";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import {approveFaceRequest, rejectFaceRequest} from "../../common/services/services";
 
 
 function FormApproveFace({handleClose, request}) {
-  const dbRef = getDatabase();
-  const studentsRef = ref(dbRef, 'Students');
-
   const handleApproveFace = () => {
     approveFaceRequest(request.faceRequest, request.student);
+    setTimeout(()=>{
+      window.location.reload();
+    },0);
     handleClose();
   }
 
   const handleRejectFace = () => {
     rejectFaceRequest(request.faceRequest.id);
+    setTimeout(()=>{
+      window.location.reload();
+    },0);
     handleClose();
   }
 

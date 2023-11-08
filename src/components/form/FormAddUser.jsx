@@ -13,7 +13,7 @@ import {
   TextField
 } from '@mui/material';
 import Stack from "@mui/material/Stack";
-import {onValue, getDatabase, ref} from "firebase/database";
+import {getDatabase, onValue, ref} from "firebase/database";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
@@ -21,7 +21,13 @@ import {useAuth} from "../../AuthContext";
 import {getAuth} from "firebase/auth";
 import {useFormik} from "formik";
 import {validate} from "../../common/Schema/userSchema";
-import {insertStudentToCourse, writeStudentData, writeTeacherData, writeUserData} from "../../common/services/services";
+import {
+  insertStudentToCourse,
+  insertStudentToSession, insertTeacherToCourse, insertTeacherToSession,
+  writeStudentData,
+  writeTeacherData,
+  writeUserData
+} from "../../common/services/services";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,7 +52,10 @@ function FormAddUser({handleClose}) {
     // Use onValue to listen for changes in the Courses reference
     const coursesSub = onValue(coursesRef, (snapshot) => {
       if (snapshot.exists()) {
-        const coursesData = snapshot.val();
+        const coursesData = Object.keys(snapshot.val()).map((key) => ({
+          id: key,
+          ...snapshot.val()[key],
+        }));
         setListCourses(coursesData);
       }
     });
@@ -81,16 +90,39 @@ function FormAddUser({handleClose}) {
     validate,
     onSubmit: async (values) => {
       const { confirmPassword, password, role, ...userData } = values;
+
+      // insert student to course students db
+      if (role === "student"){
+        values.courses.map(course => {
+          const courseId = course.split(":")[0];
+          insertStudentToCourse(courseId, values.id, values.photo, values.name);
+          const courseInfo = listCourses.find(course => course.id === courseId);
+          const sessionInfo = courseInfo.sessions;
+          for (const date in sessionInfo) {
+            for(const id in sessionInfo[date]){
+              insertStudentToSession(date, id, values.id);
+            }
+          }
+        })
+      }else {
+        values.courses.map(course => {
+          const courseId = course.split(":")[0];
+          insertTeacherToCourse(courseId, values.id);
+          const courseInfo = listCourses.find(course => course.id === courseId);
+          const sessionInfo = courseInfo.sessions;
+          for (const date in sessionInfo) {
+            for(const id in sessionInfo[date]){
+              insertTeacherToSession(date, id, values.id, values.name);
+            }
+          }
+        })
+      }
+
       userData.courses = userData.courses.reduce((acc, course) => {
         const [courseCode, isSelected] = course.split(': ');
         acc[courseCode] = isSelected === "true";
         return acc;
       }, {});
-
-      // insert student to course students db
-      values.courses.map(course => {
-        insertStudentToCourse(course.split(":")[0], values.id, values.photo, values.name);
-      })
       const dobParts = userData.dob.split('-');
       if (dobParts.length === 3) {
         userData.dob = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
@@ -234,9 +266,9 @@ function FormAddUser({handleClose}) {
             {Object.entries(listCourses).map(([key, value]) => (
               <MenuItem
                 key={key}
-                value={`${key}: ${true}`}
+                value={`${value.id}: ${true}`}
               >
-                {key}: {value.name}
+                {value.id}: {value.name}
               </MenuItem>
             ))}
           </Select>

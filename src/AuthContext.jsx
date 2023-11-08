@@ -1,11 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {auth} from "./firebase";
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-
-} from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword,} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 
@@ -41,9 +36,10 @@ export function AuthProvider({children}) {
         setLoginInfo({"email": email, "password": password});
       })
       .catch((error) => {
-        console.log(error);
-        toast.warn('Your email or password is not correct!');
-        navigate("/login");
+        if (!loginInfo) {
+          toast.warn('Your email or password is not correct!');
+          navigate("/login");
+        }
       });
   }
 

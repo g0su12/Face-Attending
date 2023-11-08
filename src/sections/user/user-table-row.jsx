@@ -35,7 +35,7 @@ export default function UserTableRow({
     setOpen(null);
   };
 
-  return (
+  return ( role !== "admin" &&
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell padding="checkbox">
