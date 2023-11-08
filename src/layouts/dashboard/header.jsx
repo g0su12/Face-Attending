@@ -39,6 +39,8 @@ export default function Header({onOpenNav}) {
           ...snapshot.val()[key],
         }));
         setListFr(frData);
+      }else {
+        setListFr([...listFr]);
       }
     });
 

@@ -36,13 +36,13 @@ export const deleteStudentCourses = (studentId, courseId) => {
   });
 };
 
-export const deleteStudentSession = (date, id, studentId) => {
-  get(ref(db, 'Sessions/' + date + "/" + id + "/students")).then(r => {
-    const removeProperty = (propKey, {[propKey]: propValue, ...rest}) => rest;
-    const updates = removeProperty(studentId, r.val());
-    update(ref(db, 'Sessions/' + date + "/" + id + "/students"), updates).then(r => {
-    })
-  })
+export const deleteStudentSession = async (date, id, studentId) => {
+  const data = {};
+  const removeProperty = (propKey, {[propKey]: propValue, ...rest}) => rest;
+  const updates = await get(ref(db, 'Sessions/' + date + "/" + id + "/students")).then(r => removeProperty(studentId, r.val()))
+  data["students"] = updates;
+  await update(ref(db, 'Sessions/' + date + "/" + id), data).then(x => {
+  });
 };
 
 export const deleteStudentAttendance = (studentId) => {
@@ -61,15 +61,21 @@ export const rejectFaceRequest = (id) => {
 
 export const approveFaceRequest = (fr, student) => {
   update(ref(db, `Students/` + student.id), {
-    allVectors: fr.allVectors, kMeanVectors: fr.kMeanVectors, currentFace: fr.currentFace,
+    // allVectors: fr.allVectors,
+    // kMeanVectors: fr.kMeanVectors,
+    currentFace: fr.currentFace,
   }).then(r => {
     // remove face request after approve
     rejectFaceRequest(student.id);
   });
 }
 
-export const writeCourseData = (courseData) => {
+export const writeCourseData = (courseData, teacherId) => {
   set(ref(db, 'Courses/' + courseData.id), courseData).then(r => {
+    const updates = {};
+    updates[courseData.id] = true;
+    update(ref(db, 'Teachers/' + teacherId + '/courses'), updates).then(r => {
+    });
   });
 }
 

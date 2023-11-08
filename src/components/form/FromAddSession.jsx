@@ -93,7 +93,9 @@ function FormAddSession({handleClose}) {
       sessionData.endCheckInTime = sessionData.endCheckInTime.split("T").reverse().join(" ");
       sessionData.startCheckInTime = sessionData.startCheckInTime.split("T").reverse().join(" ");
       sessionData.courseName = listCourses.find(course => course.id === sessionData.courseId).name;
+      sessionData.teacherId = listCourses.find(course => course.id === sessionData.courseId).teacherId;
       sessionData.teacherName = listTeachers.find(teacher => teacher.id === sessionData.teacherId).name;
+
       writeSessionData(sessionData);
       handleClose();
     },
@@ -212,36 +214,6 @@ function FormAddSession({handleClose}) {
             error={formik.touched.startTime && Boolean(formik.errors.startTime)}
             helperText={formik.touched.startTime && formik.errors.startTime}
           />
-        </Grid>
-        <Grid item width={300}>
-          <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Chọn giáo viên:
-          </InputLabel>
-          <Select
-            label="Chọn giáo viên"
-            name="teacherId"
-            value={formik.values.teacherId}
-            onChange={formik.handleChange}
-            input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
-            renderValue={(selected) => (
-              <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                <Chip key={selected} label={selected}/>
-              </Box>
-            )}
-            MenuProps={MenuProps}
-          >
-            {Object.entries(listTeachers).map(([key, value]) => (
-              <MenuItem
-                key={key}
-                value={`${value.id}`}
-              >
-                {value.id}: {value.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {formik.errors.teacherId && formik.touched.teacherId &&
-            <FormHelperText error={formik.touched.teacherId && Boolean(formik.errors.teacherId)}>Vui lòng chọn giáo viên
-              cho lớp học</FormHelperText>}
         </Grid>
       </Grid>
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{my: 1}}/>

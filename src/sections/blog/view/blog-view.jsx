@@ -14,7 +14,7 @@ import PostSearch from '../post-search';
 
 // ----------------------------------------------------------------------
 
-export default function BlogView() {
+export default function StudentView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>

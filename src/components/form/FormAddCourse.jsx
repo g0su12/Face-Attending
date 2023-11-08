@@ -68,7 +68,6 @@ function FormAddUser({handleClose}) {
       values.students.map((student) => {
         insertCourseToStudent(student, values.id)
       });
-
       const studentsData = listStudents.map(({ id, name, photo }) => ({ id, name, photo }));
       values.students = studentsData.filter(student => values.students.includes(student.id));
       const courseData = {...values};
@@ -81,7 +80,7 @@ function FormAddUser({handleClose}) {
         return acc;
       }, {})
 
-      writeCourseData(courseData);
+      writeCourseData(courseData, values.teacherId);
       handleClose();
     },
   });

@@ -36,10 +36,8 @@ export function AuthProvider({children}) {
         setLoginInfo({"email": email, "password": password});
       })
       .catch((error) => {
-        if (!loginInfo) {
-          toast.warn('Your email or password is not correct!');
-          navigate("/login");
-        }
+        toast.warn('Your email or password is not correct!');
+        navigate("/login");
       });
   }
 

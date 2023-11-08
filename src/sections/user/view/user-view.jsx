@@ -167,8 +167,7 @@ export default function UserPage() {
     if (role === "student"){
       rejectFaceRequest(userId);
       const values = Object.keys(listStudents.find(student => userId === student.id).courses);
-      values.forEach(async course => {
-        const courseId = course.split(":")[0];
+      values.forEach(async courseId => {
         await deleteStudentCourses(userId, courseId);
         const courseInfo = listCourses.find(course => course.id === courseId);
         const sessionInfo = courseInfo.sessions;
@@ -181,8 +180,7 @@ export default function UserPage() {
       deleteStudentAttendance(userId);
     }else {
       const values = Object.keys(listTeachers.find(teacher => userId === teacher.id).courses);
-      values.map(async course => {
-        const courseId = course.split(":")[0];
+      values.map(async courseId => {
         await insertTeacherToCourse(courseId, "");
         const courseInfo = listCourses.find(course => course.id === courseId);
         const sessionInfo = courseInfo.sessions;
@@ -246,12 +244,11 @@ export default function UserPage() {
                       id={row.id}
                       role={row.role}
                       avatarUrl={row.avatarUrl ? row.avatarUrl : `/assets/images/avatars/avatar_2.jpg`}
-                      selected={selected.indexOf(row.name) !== -1}
+                      selected={selected.indexOf(row.id) !== -1}
                       handleDeleteUser={handleDelete}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      handleClick={(event) => handleClick(event, row.id)}
                     />
                   ))}
-
                 <TableEmptyRows
                   height={77}
                   emptyRows={emptyRows(page, rowsPerPage, listUsers.length)}

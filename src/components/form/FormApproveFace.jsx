@@ -12,17 +12,11 @@ import {approveFaceRequest, rejectFaceRequest} from "../../common/services/servi
 function FormApproveFace({handleClose, request}) {
   const handleApproveFace = () => {
     approveFaceRequest(request.faceRequest, request.student);
-    setTimeout(()=>{
-      window.location.reload();
-    },0);
     handleClose();
   }
 
   const handleRejectFace = () => {
     rejectFaceRequest(request.faceRequest.id);
-    setTimeout(()=>{
-      window.location.reload();
-    },0);
     handleClose();
   }
 

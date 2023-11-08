@@ -14,17 +14,17 @@ const navConfig = [
   },
   {
     title: 'Người dùng',
-    path: '/user',
+    path: '/users',
     icon: icon('ic_user'),
   },
   {
-    title: 'Khoá học',
-    path: '/products',
+    title: 'Môn học',
+    path: '/courses',
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/blog',
+    title: 'Học sinh',
+    path: '/students',
     icon: icon('ic_blog'),
   },
   {
