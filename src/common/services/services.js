@@ -61,8 +61,8 @@ export const rejectFaceRequest = (id) => {
 
 export const approveFaceRequest = (fr, student) => {
   update(ref(db, `Students/` + student.id), {
-    // allVectors: fr.allVectors,
-    // kMeanVectors: fr.kMeanVectors,
+    allVectors: fr.allVectors,
+    kMeanVectors: fr.kMeanVectors,
     currentFace: fr.currentFace,
   }).then(r => {
     // remove face request after approve
