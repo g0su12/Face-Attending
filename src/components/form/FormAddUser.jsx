@@ -129,7 +129,7 @@ function FormAddUser({handleClose}) {
       }
 
       const auth = getAuth();
-      const uid = await signup(auth, values.email, values.password);
+      const uid = await signup(values.email, values.password);
       // insert user to Users table
       writeUserData(uid, values.id, values.email, values.role);
       if (values.role === "student") {

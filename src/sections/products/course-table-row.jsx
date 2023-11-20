@@ -13,14 +13,14 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
+export default function CourseTableRow({
      selected,
      name,
      id,
      teacher,
      credits,
      handleClick,
-     handleDeleteUser
+     handleShowSessions
    }) {
   const [open, setOpen] = useState(null);
 
@@ -68,21 +68,17 @@ export default function UserTableRow({
           sx: {width: 140},
         }}
       >
-        <MenuItem onClick={() => handleDeleteUser(uid, id, role)} sx={{color: 'blue'}}>
-          <Iconify icon="eva:edit-fill" sx={{mr: 0}}/>
-          Thêm học sinh
-        </MenuItem>
 
-        <MenuItem onClick={() => handleDeleteUser(uid, id, role)} sx={{color: 'green'}}>
+        <MenuItem onClick={() => handleShowSessions(id)} sx={{color: 'black'}}>
           <Iconify icon="eva:edit-fill" sx={{mr: 0}}/>
-          Thêm tiết học
+          Xem các tiết học
         </MenuItem>
       </Popover>
     </>
   );
 }
 
-UserTableRow.propTypes = {
+CourseTableRow.propTypes = {
   avatarUrl: PropTypes.any,
   company: PropTypes.any,
   handleClick: PropTypes.func,

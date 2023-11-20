@@ -1,31 +1,33 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import Avatar from '@mui/material/Avatar';
-import { alpha } from '@mui/material/styles';
+import {alpha} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import { usePathname } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
+import {usePathname} from 'src/routes/hooks';
+import {RouterLink} from 'src/routes/components';
 
-import { useResponsive } from 'src/hooks/use-responsive';
+import {useResponsive} from 'src/hooks/use-responsive';
 
-import { account } from 'src/_mock/account';
+import {account} from 'src/_mock/account';
 
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 
-import { NAV } from './config-layout';
+import {NAV} from './config-layout';
 import navConfig from './config-navigation';
+import {useAuth} from "../../AuthContext";
 
 // ----------------------------------------------------------------------
 
-export default function Nav({ openNav, onCloseNav }) {
+export default function Nav({openNav, onCloseNav}) {
   const pathname = usePathname();
+  const {personalInfo} = useAuth();
 
   const upLg = useResponsive('up', 'lg');
 
@@ -49,22 +51,22 @@ export default function Nav({ openNav, onCloseNav }) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      <Avatar src={account.photoURL} alt="photoURL"/>
 
-      <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+      <Box sx={{ml: 2}}>
+        <Typography variant="subtitle2">{personalInfo.id}</Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.role}
+        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+          {personalInfo.role}
         </Typography>
       </Box>
     </Box>
   );
 
   const renderMenu = (
-    <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
+    <Stack component="nav" spacing={0.5} sx={{px: 2}}>
       {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
+        <NavItem key={item.title} item={item}/>
       ))}
     </Stack>
   );
@@ -80,21 +82,21 @@ export default function Nav({ openNav, onCloseNav }) {
         },
       }}
     >
-      <Logo sx={{ mt: 3, ml: 4 }} />
+      <Logo sx={{mt: 3, ml: 4}}/>
 
       {renderAccount}
 
       {renderMenu}
 
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{flexGrow: 1}}/>
     </Scrollbar>
   );
 
   return (
     <Box
       sx={{
-        flexShrink: { lg: 0 },
-        width: { lg: NAV.WIDTH },
+        flexShrink: {lg: 0},
+        width: {lg: NAV.WIDTH},
       }}
     >
       {upLg ? (
@@ -132,7 +134,7 @@ Nav.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavItem({ item }) {
+function NavItem({item}) {
   const pathname = usePathname();
 
   const active = item.path === pathname;
@@ -158,7 +160,7 @@ function NavItem({ item }) {
         }),
       }}
     >
-      <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+      <Box component="span" sx={{width: 24, height: 24, mr: 2}}>
         {item.icon}
       </Box>
 

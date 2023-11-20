@@ -3,6 +3,7 @@ import {auth} from "./firebase";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword,} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {child, get, getDatabase, ref} from "firebase/database";
 
 const AuthContext = React.createContext(undefined);
 
@@ -13,15 +14,16 @@ export function useAuth() {
 export function AuthProvider({children}) {
   const [currentUser, setCurrentUser] = useState();
   const [loginInfo, setLoginInfo] = useState({});
-  const [personalInfo, setPersonalInfo] = useState();
+  const [personalInfo, setPersonalInfo] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const dbRef = ref(getDatabase());
 
-  async function signup(auth, email, password) {
+  async function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        await login(auth, loginInfo.email, loginInfo.password);
+        await login(loginInfo.email, loginInfo.password);
         return user.uid;
       })
       .catch((error) => {
@@ -30,10 +32,15 @@ export function AuthProvider({children}) {
       });
   }
 
-  function login(auth, email, password) {
+  function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((userCredential) => {
         setLoginInfo({"email": email, "password": password});
+        get(child(dbRef, `Users/` + userCredential.user.uid)).then((snapshot) => {
+          if (snapshot.exists()) {
+            setPersonalInfo(snapshot.val());
+        }
+        });
       })
       .catch((error) => {
         toast.warn('Your email or password is not correct!');

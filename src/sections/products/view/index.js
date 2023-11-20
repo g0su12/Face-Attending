@@ -1,1 +1,1 @@
-export { default as CourseView } from './products-view';
+export { default as CourseView } from './courses-view';

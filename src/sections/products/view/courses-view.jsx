@@ -14,16 +14,17 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
-import UserTableRow from '../user-table-row';
-import UserTableHead from '../user-table-head';
+import CourseTableRow from '../course-table-row';
+import UserTableHead from '../course-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
+import CourseTableToolbar from '../course-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import CustomModal from "../../../components/Modal/CustomModal";
 import {getDatabase, onValue, ref} from "firebase/database";
 import {deleteUserByUid} from "../../../common/services/services";
 import FormAddCourse from "../../../components/form/FormAddCourse";
 import FormAddSession from "../../../components/form/FromAddSession";
+import {useNavigate} from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -112,6 +113,10 @@ export default function CoursePage() {
     filterName,
   });
 
+  const navigate = useNavigate();
+  const handleShowSessions = (courseId) => {
+    navigate(`/courses/${courseId}`)
+  }
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -136,7 +141,7 @@ export default function CoursePage() {
         <FormAddSession handleClose={() => setOpenModalSession(false)} />
       </CustomModal>
       <Card>
-        <UserTableToolbar
+        <CourseTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -164,14 +169,14 @@ export default function CoursePage() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <UserTableRow
+                    <CourseTableRow
                       key={row.id}
                       name={row.name}
                       id={row.id}
                       teacher={row.teacherId}
                       credits={row.numberCredits}
                       selected={selected.indexOf(row.name) !== -1}
-                      handleDeleteUser={deleteUserByUid}
+                      handleShowSessions={handleShowSessions}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
                   ))}

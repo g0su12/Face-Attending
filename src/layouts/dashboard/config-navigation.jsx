@@ -20,17 +20,12 @@ const navConfig = [
   {
     title: 'Môn học',
     path: '/courses',
-    icon: icon('ic_cart'),
+    icon: icon('book-svgrepo-com'),
   },
   {
     title: 'Học sinh',
     path: '/students',
-    icon: icon('ic_blog'),
-  },
-  {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
+    icon: icon('ic_user'),
   },
 ];
 

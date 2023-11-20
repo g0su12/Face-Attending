@@ -13,8 +13,7 @@ import {bgGradient} from 'src/theme/css';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import {Backdrop, CircularProgress} from "@mui/material";
-import {useAuth} from "../../AuthContext"
-import {auth} from "../../firebase";
+import {useAuth} from "../../AuthContext" 
 import {useNavigate} from "react-router-dom";
 
 // ----------------------------------------------------------------------
@@ -33,7 +32,7 @@ export default function LoginView() {
 
     try {
       setLoading(true);
-      await login(auth, email, password);
+      await login(email, password);
       navigate("/");
     } catch (e) {
       console.log(e);

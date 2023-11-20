@@ -16,15 +16,11 @@ import {useAuth} from "../../../AuthContext";
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'Trang chủ',
     icon: 'eva:home-fill',
   },
   {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
+    label: 'Cài đặt',
     icon: 'eva:settings-2-fill',
   },
 ];
@@ -33,7 +29,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const {logout} = useAuth();
+  const {logout, personalInfo} = useAuth();
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -86,10 +82,10 @@ export default function AccountPopover() {
       >
         <Box sx={{my: 1.5, px: 2}}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {personalInfo.id}
           </Typography>
           <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
-            {account.email}
+            {personalInfo.email}
           </Typography>
         </Box>
 
@@ -109,7 +105,7 @@ export default function AccountPopover() {
           onClick={() => logout()}
           sx={{typography: 'body2', color: 'error.main', py: 1.5}}
         >
-          Logout
+          Đăng xuất
         </MenuItem>
       </Popover>
     </>

@@ -1,1 +1,1 @@
-export { default as StudentView } from './blog-view';
+export { default as StudentView } from './student-view';
