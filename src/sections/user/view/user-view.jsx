@@ -163,7 +163,6 @@ export default function UserPage() {
   });
 
   const handleDelete = (uid, userId, role) => {
-    console.log(userId, role)
     if (role === "student"){
       rejectFaceRequest(userId);
       const values = Object.keys(listStudents.find(student => userId === student.id).courses);
