@@ -1,12 +1,13 @@
-import {lazy, Suspense} from 'react';
-import {Navigate, Outlet, useRoutes} from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
-
-import {PrivateRoute} from "src/common/guards/AuthGuard";
+import { OutGuard } from 'src/common/guards/OutGuard';
+import { PrivateRoute } from 'src/common/guards/AuthGuard';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const StudentPage = lazy(() => import('src/pages/student'));
+export const TeacherPage = lazy(() => import('src/pages/teacher'));
 export const StudentDetailPage = lazy(() => import('src/pages/studentDetail'));
 export const CourseDetailPage = lazy(() => import('src/pages/courseDetail'));
 export const UserPage = lazy(() => import('src/pages/user'));
@@ -23,31 +24,35 @@ export default function Router() {
         <PrivateRoute>
           <DashboardLayout>
             <Suspense>
-              <Outlet/>
+              <Outlet />
             </Suspense>
           </DashboardLayout>
         </PrivateRoute>
       ),
       children: [
-        {element: <IndexPage/>, index: true},
-        {path: 'users', element: <UserPage/>},
-        {path: 'courses', element: <CoursePage/>},
-        {path: 'students', element: <StudentPage/>},
-        {path: 'students/:studentId', element: <StudentDetailPage/>},
-        {path: 'courses/:courseId', element: <CourseDetailPage/>},
+        { path: '/users', element: <UserPage />, index: true },
+        { path: 'courses', element: <CoursePage /> },
+        { path: 'teachers', element: <TeacherPage /> },
+        { path: 'students', element: <StudentPage /> },
+        { path: 'students/:studentId', element: <StudentDetailPage /> },
+        { path: 'courses/:courseId', element: <CourseDetailPage /> },
       ],
     },
     {
       path: 'login',
-      element: <LoginPage/>,
+      element: (
+        <OutGuard>
+          <LoginPage />
+        </OutGuard>
+      ),
     },
     {
       path: '404',
-      element: <Page404/>,
+      element: <Page404 />,
     },
     {
       path: '*',
-      element: <Navigate to="/404" replace/>,
+      element: <Navigate to="/users" replace />,
     },
   ]);
 }

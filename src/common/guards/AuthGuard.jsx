@@ -1,8 +1,8 @@
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../AuthContext";
-import {getDatabase, ref, child, get} from "firebase/database";
-import {toast} from "react-toastify";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
+import { getDatabase, ref, child, get } from 'firebase/database';
+import { toast } from 'react-toastify';
 
 export function PrivateRoute({ children }) {
   const { currentUser, logout } = useAuth();
@@ -25,8 +25,8 @@ export function PrivateRoute({ children }) {
       }
     };
 
-    fetchPersonalInfo().then(r => {});
+    fetchPersonalInfo().then((r) => {});
   }, []);
 
-  return currentUser ? children : navigate("/login")
+  return currentUser ? children : navigate('/login');
 }

@@ -44,7 +44,7 @@ export default function StudentTableRow({
         <TableCell>{name}</TableCell>
         <TableCell>{dob}</TableCell>
         <TableCell>{email}</TableCell>
-        <TableCell>{gender.charAt(0).toUpperCase() + gender.slice(1)}</TableCell>
+        <TableCell>{gender === "male" ? "Nam" : " Nữ"}</TableCell>
         <TableCell>{mainClass}</TableCell>
       </TableRow>
     </>

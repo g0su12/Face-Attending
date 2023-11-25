@@ -1,26 +1,30 @@
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-
-import { getDatabase, onValue, ref } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import Scrollbar from '../../../components/scrollbar/scrollbar';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import { deleteUserByUid } from '../../../common/services/services';
-import TableEmptyRows from '../../products/table-empty-rows';
-import { applyFilter, emptyRows, getComparator } from '../utils';
-import TableNoData from '../../products/table-no-data';
-import TablePagination from '@mui/material/TablePagination';
+
 import Card from '@mui/material/Card';
-import StudentTableRow from '../student-table-row';
-import StudentTableHead from '../student-table-head';
-import StudentTableToolbar from '../student-table-toolbar';
+import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import Typography from '@mui/material/Typography';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
+
+import Iconify from 'src/components/iconify';
+import Scrollbar from 'src/components/scrollbar';
+
+import TableNoData from '../table-no-data';
+import TeacherTableRow from '../teacher-table-row';
+import TeacherTableHead from '../teacher-table-head';
+import TableEmptyRows from '../table-empty-rows';
+import TeacherTableToolbar from '../teacher-table-toolbar';
+import { emptyRows, applyFilter, getComparator } from '../utils';
+import { getDatabase, onValue, ref } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
-export default function StudentView() {
+export default function CoursePage() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -29,25 +33,24 @@ export default function StudentView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const dbRef = getDatabase();
-  const coursesRef = ref(dbRef, 'Students');
-  const [listStudents, setListStudents] = useState([]);
+  const teachersRef = ref(dbRef, 'Teachers');
+  const [listTeachers, setListTeachers] = useState([]);
 
   useEffect(() => {
-    const studentsSub = onValue(coursesRef, (snapshot) => {
+    const teachersSub = onValue(teachersRef, (snapshot) => {
       if (snapshot.exists()) {
-        const studentsData = Object.keys(snapshot.val()).map((key) => ({
+        const teachersData = Object.keys(snapshot.val()).map((key) => ({
           id: key,
           ...snapshot.val()[key],
         }));
-        setListStudents(studentsData);
+        setListTeachers(teachersData);
       }
     });
 
     return () => {
-      studentsSub();
+      teachersSub();
     };
   }, []);
-
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -58,7 +61,7 @@ export default function StudentView() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = listStudents.map((n) => n.name);
+      const newSelecteds = listTeachers.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -98,21 +101,25 @@ export default function StudentView() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: listStudents,
+    inputData: listTeachers,
     comparator: getComparator(order, orderBy),
     filterName,
   });
+
+  const navigate = useNavigate();
+  const handleShowSessions = (courseId) => {
+    navigate(`/courses/${courseId}`);
+  };
 
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Danh sách sinh viên</Typography>
+        <Typography variant="h4">Giáo viên</Typography>
       </Stack>
-
       <Card>
-        <StudentTableToolbar
+        <TeacherTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -121,43 +128,41 @@ export default function StudentView() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <StudentTableHead
+              <TeacherTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={listStudents.length}
+                rowCount={listTeachers.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'id', label: 'Mã học sinh' },
-                  { id: 'name', label: 'Tên học sinh' },
-                  { id: 'dob', label: 'Ngày sinh' },
+                  { id: 'id', label: 'Mã giáo viên' },
+                  { id: 'name', label: 'Tên giáo viên' },
                   { id: 'email', label: 'Email' },
                   { id: 'gender', label: 'Giới tính' },
-                  { id: 'mainClass', label: 'Lớp hành chính' },
+                  { id: 'deviceId', label: 'ID thiết bị' },
                 ]}
               />
               <TableBody>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <StudentTableRow
+                    <TeacherTableRow
                       key={row.id}
                       name={row.name}
                       id={row.id}
                       email={row.email}
                       gender={row.gender}
-                      dob={row.dob}
-                      mainClass={row.mainClass}
+                      deviceId={row.deviceId}
                       selected={selected.indexOf(row.name) !== -1}
-                      handleDeleteUser={deleteUserByUid}
+                      handleShowSessions={handleShowSessions}
                       handleClick={(event) => handleClick(event, row.name)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, listStudents.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, listTeachers.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -169,7 +174,7 @@ export default function StudentView() {
         <TablePagination
           page={page}
           component="div"
-          count={listStudents.length}
+          count={listTeachers.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}

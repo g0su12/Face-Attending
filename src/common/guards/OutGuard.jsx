@@ -1,15 +1,16 @@
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../AuthContext";
-import {getDatabase, ref, child, get} from "firebase/database";
-import {toast} from "react-toastify";
+import { useAuth } from '../../AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export function OutGuard({ children }) {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (currentUser.user) {
+      navigate("/");
+    }
   }, [currentUser, navigate]);
 
-  return !currentUser ? children : navigate("/")
+  return children;
 }

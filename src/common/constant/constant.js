@@ -43,3 +43,17 @@ export const columnsSession = [
 ];
 
 
+export function convertDateFormat(dateTimeString) {
+  const originalDate = new Date(dateTimeString);
+
+  const hours = originalDate.getHours().toString().padStart(2, '0');
+  const minutes = originalDate.getMinutes().toString().padStart(2, '0');
+  const day = originalDate.getDate().toString().padStart(2, '0');
+  const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+  const year = originalDate.getFullYear();
+
+  const convertedDate = `${hours}:${minutes} ${day}/${month}/${year}`;
+
+  return convertedDate;
+}
+

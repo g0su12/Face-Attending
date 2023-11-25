@@ -8,11 +8,6 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: 'dashboard',
-    path: '/',
-    icon: icon('ic_analytics'),
-  },
-  {
     title: 'Người dùng',
     path: '/users',
     icon: icon('ic_user'),
@@ -21,6 +16,11 @@ const navConfig = [
     title: 'Môn học',
     path: '/courses',
     icon: icon('book-svgrepo-com'),
+  },
+  {
+    title: 'Giáo viên',
+    path: '/teachers',
+    icon: icon('ic_user'),
   },
   {
     title: 'Học sinh',

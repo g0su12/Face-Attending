@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -18,15 +18,18 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import CustomModal from "../../../components/Modal/CustomModal";
-import FormAddUser from "../../../components/form/FormAddUser";
-import {getDatabase, onValue, ref} from "firebase/database";
+import CustomModal from '../../../components/Modal/CustomModal';
+import FormAddUser from '../../../components/form/FormAddUser';
+import { getDatabase, onValue, ref } from 'firebase/database';
 import {
   deleteStudentAttendance,
-  deleteStudentCourses, deleteStudentSession,
+  deleteStudentCourses,
+  deleteStudentSession,
   deleteUserByUid,
-  insertTeacherToCourse, insertTeacherToSession, rejectFaceRequest
-} from "../../../common/services/services";
+  insertTeacherToCourse,
+  insertTeacherToSession,
+  rejectFaceRequest,
+} from '../../../common/services/services';
 
 // ----------------------------------------------------------------------
 
@@ -117,7 +120,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = listUsers.map((n) => n.name);
+      const newSelecteds = listUsers.map((n) => n.email);
       setSelected(newSelecteds);
       return;
     }
@@ -163,36 +166,35 @@ export default function UserPage() {
   });
 
   const handleDelete = (uid, userId, role) => {
-    if (role === "student"){
+    if (role === 'student') {
       rejectFaceRequest(userId);
-      const values = Object.keys(listStudents.find(student => userId === student.id).courses);
-      values.forEach(async courseId => {
+      const values = Object.keys(listStudents.find((student) => userId === student.id).courses);
+      values.forEach(async (courseId) => {
         await deleteStudentCourses(userId, courseId);
-        const courseInfo = listCourses.find(course => course.id === courseId);
+        const courseInfo = listCourses.find((course) => course.id === courseId);
         const sessionInfo = courseInfo.sessions;
         for (const date in sessionInfo) {
           for (const id in sessionInfo[date]) {
             await deleteStudentSession(date, id, userId);
           }
         }
-      })
+      });
       deleteStudentAttendance(userId);
-    }else {
-      const values = Object.keys(listTeachers.find(teacher => userId === teacher.id).courses);
-      values.map(async courseId => {
-        await insertTeacherToCourse(courseId, "");
-        const courseInfo = listCourses.find(course => course.id === courseId);
+    } else {
+      const values = Object.keys(listTeachers.find((teacher) => userId === teacher.id).courses);
+      values.map(async (courseId) => {
+        await insertTeacherToCourse(courseId, '');
+        const courseInfo = listCourses.find((course) => course.id === courseId);
         const sessionInfo = courseInfo.sessions;
         for (const date in sessionInfo) {
-          for(const id in sessionInfo[date]){
-            await insertTeacherToSession(date, id, "", "");
+          for (const id in sessionInfo[date]) {
+            await insertTeacherToSession(date, id, '', '');
           }
         }
-      })
+      });
     }
     deleteUserByUid(uid, userId, role);
-  }
-
+  };
 
   const notFound = !dataFiltered.length && !!filterName;
 
@@ -201,7 +203,12 @@ export default function UserPage() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Người dùng</Typography>
 
-        <Button onClick={() => setOpenModal(true)} variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button
+          onClick={() => setOpenModal(true)}
+          variant="contained"
+          color="inherit"
+          startIcon={<Iconify icon="eva:plus-fill" />}
+        >
           Thêm người dùng mới
         </Button>
       </Stack>
@@ -242,8 +249,10 @@ export default function UserPage() {
                       email={row.email}
                       id={row.id}
                       role={row.role}
-                      avatarUrl={row.avatarUrl ? row.avatarUrl : `/assets/images/avatars/avatar_2.jpg`}
-                      selected={selected.indexOf(row.id) !== -1}
+                      avatarUrl={
+                        row.avatarUrl ? row.avatarUrl : `/assets/images/avatars/avatar_2.jpg`
+                      }
+                      selected={selected.indexOf(row.email) !== -1}
                       handleDeleteUser={handleDelete}
                       handleClick={(event) => handleClick(event, row.id)}
                     />

@@ -68,7 +68,7 @@ export default function CoursePage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = listcourses.map((n) => n.name);
+      const newSelecteds = listCourses.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -146,7 +146,6 @@ export default function CoursePage() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
-
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -161,7 +160,7 @@ export default function CoursePage() {
                   { id: 'name', label: 'Tên khoá học' },
                   { id: 'id', label: 'Mã khoá học' },
                   { id: 'teacher', label: 'Giáo viên' },
-                  { id: 'credits', label: 'Số tín chỉ' },,
+                  { id: 'credits', label: 'Số tín chỉ' },
                   { id: '' },
                 ]}
               />
