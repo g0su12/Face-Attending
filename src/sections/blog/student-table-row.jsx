@@ -6,7 +6,6 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import {useNavigate} from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
 
 // ----------------------------------------------------------------------
 

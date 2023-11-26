@@ -8,9 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import Iconify from 'src/components/iconify';
-
+import {useNavigate} from "react-router-dom";
 // ----------------------------------------------------------------------
 
 export default function TeacherTableRow({
@@ -33,9 +32,14 @@ export default function TeacherTableRow({
     setOpen(null);
   };
 
+  const navigate = useNavigate();
+  const handleShowDetail = () => {
+    navigate(`/teachers/${id}`);
+  };
+
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow onClick={handleShowDetail} hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell>
