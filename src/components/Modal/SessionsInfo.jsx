@@ -19,6 +19,7 @@ import { AttendanceCard } from '../card/AttendanceCard';
 export default function SessionInfo({ studentId, openModal, setOpenModal, currentCourse, dbRef }) {
   const [attendanceStatus, setAttendanceStatus] = useState({});
   const [currentAttendance, setCurrentAttendance] = useState();
+  const [currentStudent, setCurrentStudent] = useState("");
   const [openModalSecond, setOpenModalSecond] = useState(false);
 
   const arrayAttendance = {};
@@ -49,6 +50,11 @@ export default function SessionInfo({ studentId, openModal, setOpenModal, curren
   useEffect(() => {
     fetchData().then((r) => {
       setAttendanceStatus(arrayAttendance);
+    });
+    get(child(dbRef, `Students/` + studentId)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setCurrentStudent(snapshot.val());
+      }
     });
   }, [currentCourse]);
 
@@ -119,6 +125,7 @@ export default function SessionInfo({ studentId, openModal, setOpenModal, curren
           <DialogContentText>
             <AttendanceCard
               avatarSrc={currentAttendance?.photo}
+              currentFace={currentStudent.currentFace}
               studentName={currentAttendance?.name}
               timeAttendance={currentAttendance?.checkInTime}
             />

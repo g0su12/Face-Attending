@@ -34,6 +34,13 @@ export const columnsSession = [
     width: 160,
   },
   {
+    field: 'analysisAttendance',
+    headerName: 'Thống kê điểm danh',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 150,
+  },
+  {
     field: 'roomNo',
     headerName: 'Phòng',
     description: 'This column has a value getter and is not sortable.',

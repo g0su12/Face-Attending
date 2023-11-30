@@ -20,11 +20,13 @@ import {
   Grid,
 } from '@mui/material';
 import { AttendanceCard } from 'src/components/card/AttendanceCard';
+import { analysisAttendance } from 'src/utils/analysist-attendance';
 // ----------------------------------------------------------------------
 
 export default function CourseDetailView() {
   const { courseId } = useParams();
   const [currentStudents, setCurrentStudents] = useState([]);
+  const [listStudents, setListStudents] = useState();
   const [currentSessionId, setCurrentSessionId] = useState();
   const [currentAttendance, setCurrentAttendance] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -40,7 +42,10 @@ export default function CourseDetailView() {
       for (const id in sessionInfo[date]) {
         const promise = get(child(dbRef, `Sessions/` + date + '/' + id)).then((snapshot) => {
           if (snapshot.exists()) {
-            arrayAttendance.push(snapshot.val());
+            const sessionInfo = snapshot.val();
+            sessionInfo['analysisAttendance'] = analysisAttendance(sessionInfo.students);
+            console.log(sessionInfo);
+            arrayAttendance.push(sessionInfo);
           }
         });
         promises.push(promise);
@@ -61,6 +66,11 @@ export default function CourseDetailView() {
         fetchData(snapshot.val()).then((r) => {
           setAttendanceStatus(arrayAttendance);
         });
+      }
+    });
+    get(child(dbRef, `Students`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setListStudents(snapshot.val());
       }
     });
   }, []);
@@ -90,7 +100,7 @@ export default function CourseDetailView() {
             {status.split('T')[0].split('-').reverse().join('-')}
           </Typography>
           <Typography variant="h5" component="div">
-            {studentId}
+            {studentId} - {listStudents[studentId].name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {status === '' ? 'Chưa điểm danh' : 'Đã điểm danh'}

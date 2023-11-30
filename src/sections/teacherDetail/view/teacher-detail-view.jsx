@@ -10,11 +10,9 @@ import { Grid, Chip } from '@mui/material';
 // ----------------------------------------------------------------------
 
 export default function TeacherDetailView() {
-  const [openModal, setOpenModal] = useState(false);
   const { teacherId } = useParams();
+  const [courseNames, setCourseNames] = useState([]);
   const [teacher, setTeacher] = useState({});
-  const [courses, setCourse] = useState([]);
-  const [currentCourse, setCurrentCourse] = useState({});
   const dbRef = ref(getDatabase());
 
   useEffect(() => {
@@ -23,7 +21,26 @@ export default function TeacherDetailView() {
         setTeacher(snapshot.val());
       }
     });
-  }, []);
+    const fetchCourseNames = async () => {
+      const courses = teacher.courses || {};
+      const names = await Promise.all(
+        Object.keys(courses).map((subject) => getCourseName(subject))
+      );
+      setCourseNames(names.filter((course) => course !== null));
+    };
+
+    fetchCourseNames();
+  }, [teacher.courses]);
+
+  const getCourseName = async (courseId) => {
+    const snapshot = await get(child(dbRef, `Courses/${courseId}`));
+
+    if (snapshot.exists()) {
+      const courseInfo = snapshot.val();
+      return { id: courseId, name: courseInfo.name };
+    }
+    return null;
+  };
 
   return (
     <Container>
@@ -51,14 +68,12 @@ export default function TeacherDetailView() {
             </Typography>
             <Typography variant="body1" paragraph>
               Các lớp học đang dạy{' '}
-              {Object.keys(teacher.courses || {}).map((subject, index) => (
-                <Chip
-                  key={index}
-                  label={subject}
-                  color={teacher.courses[subject] ? 'primary' : 'default'}
-                />
-              ))}
             </Typography>
+            <div>
+              {courseNames.map((course) => (
+                <Chip key={course.id} label={course.name} color={'primary'} />
+              ))}
+            </div>
           </Grid>
         </Grid>
       </Paper>
