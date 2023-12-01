@@ -45,7 +45,7 @@ export default function TeacherDetailView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Thông tin chi tiết giáo viên {teacher.name}</Typography>
+        <Typography variant="h4">Thông tin chi tiết giảng viên {teacher.name}</Typography>
       </Stack>
       <Paper elevation={1} style={{ padding: 20, marginTop: 20 }}>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>

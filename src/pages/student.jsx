@@ -8,7 +8,7 @@ export default function StudentPage() {
   return (
     <>
       <Helmet>
-        <title> Danh sách học sinh </title>
+        <title> Danh sách sinh viên</title>
       </Helmet>
 
       <StudentView />

@@ -116,7 +116,7 @@ export default function CoursePage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Giáo viên</Typography>
+        <Typography variant="h4">Giảng viên</Typography>
       </Stack>
       <Card>
         <TeacherTableToolbar
@@ -136,8 +136,8 @@ export default function CoursePage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'id', label: 'Mã giáo viên' },
-                  { id: 'name', label: 'Tên giáo viên' },
+                  { id: 'id', label: 'Mã giảng viên' },
+                  { id: 'name', label: 'Tên giảng viên' },
                   { id: 'email', label: 'Email' },
                   { id: 'gender', label: 'Giới tính' },
                   { id: 'deviceId', label: 'ID thiết bị' },

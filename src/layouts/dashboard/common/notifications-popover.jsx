@@ -53,7 +53,7 @@ export default function NotificationsPopover({listsFr, listStudents}) {
           <Iconify width={24} icon="solar:bell-bing-bold-duotone"/>
         </Badge>
       </IconButton>
-      <CustomModal open={openModal} title={`Xác thực khuôn mặt của học sinh `}>
+      <CustomModal open={openModal} title={`Xác thực khuôn mặt của sinh viên `}>
         <FormApproveFace request={request} handleClose={() => setOpenModal(false)}/>
       </CustomModal>
       <Popover
@@ -95,7 +95,7 @@ export default function NotificationsPopover({listsFr, listStudents}) {
 
         <Box sx={{p: 1}}>
           <Button fullWidth disableRipple>
-            View All
+            Xem tất cả
           </Button>
         </Box>
       </Popover>

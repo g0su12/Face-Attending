@@ -33,7 +33,7 @@ export default function StudentTableToolbar({ numSelected, filterName, onFilterN
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Tìm học sinh..."
+          placeholder="Tìm sinh viên..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify

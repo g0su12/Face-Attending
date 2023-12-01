@@ -39,7 +39,7 @@ export default function StudentDetailView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Thông tin chi tiết học sinh {student.name}</Typography>
+        <Typography variant="h4">Thông tin chi tiết sinh viên {student.name}</Typography>
       </Stack>
       <Paper elevation={1} style={{ padding: 20, marginTop: 20 }}>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>

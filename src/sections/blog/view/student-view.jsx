@@ -129,8 +129,8 @@ export default function StudentView() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'id', label: 'Mã học sinh' },
-                  { id: 'name', label: 'Tên học sinh' },
+                  { id: 'id', label: 'Mã sinh viên' },
+                  { id: 'name', label: 'Tên sinh viên' },
                   { id: 'dob', label: 'Ngày sinh' },
                   { id: 'email', label: 'Email' },
                   { id: 'gender', label: 'Giới tính' },

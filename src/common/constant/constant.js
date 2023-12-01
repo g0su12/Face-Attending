@@ -3,7 +3,7 @@ export const columnsSession = [
   {field: 'courseName', headerName: 'Môn học', width: 150},
   {
     field: 'teacherName',
-    headerName: 'Giáo viên',
+    headerName: 'Giảng viên',
     width: 160,
   },
   {

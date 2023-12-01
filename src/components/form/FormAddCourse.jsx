@@ -126,10 +126,10 @@ function FormAddUser({handleClose}) {
         </Grid>
         <Grid item width={300}>
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Chọn học sinh:
+            Chọn sinh viên:
           </InputLabel>
           <Select
-            label="Học sinh"
+            label="Sinh viên"
             name="students"
             multiple
             value={formik.values.students}
@@ -159,10 +159,10 @@ function FormAddUser({handleClose}) {
         </Grid>
         <Grid item width={300}>
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
-            Chọn giáo viên:
+            Chọn giảng viên:
           </InputLabel>
           <Select
-            label="Chọn giáo viên"
+            label="Chọn giảng viên"
             name="teacherId"
             value={formik.values.teacherId}
             onChange={formik.handleChange}
@@ -184,7 +184,7 @@ function FormAddUser({handleClose}) {
             ))}
           </Select>
           {formik.errors.teacherId && formik.touched.teacherId &&
-            <FormHelperText error={formik.touched.teacherId && Boolean(formik.errors.teacherId)}>Vui lòng chọn giáo viên
+            <FormHelperText error={formik.touched.teacherId && Boolean(formik.errors.teacherId)}>Vui lòng chọn giảng viên
               cho lớp học</FormHelperText>}
         </Grid>
       </Grid>

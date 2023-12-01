@@ -181,7 +181,7 @@ export default function UserPage() {
       });
       deleteStudentAttendance(userId);
     } else {
-      const values = Object.keys(listTeachers.find((teacher) => userId === teacher.id).courses);
+      const values = Object.keys(listTeachers.find((teacher) => userId === teacher.id).courses || {});
       values.map(async (courseId) => {
         await insertTeacherToCourse(courseId, '');
         const courseInfo = listCourses.find((course) => course.id === courseId);

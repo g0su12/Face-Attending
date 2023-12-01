@@ -13,17 +13,17 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'Môn học',
+    title: 'Khoá học',
     path: '/courses',
     icon: icon('book-svgrepo-com'),
   },
   {
-    title: 'Giáo viên',
+    title: 'Giảng viên',
     path: '/teachers',
     icon: icon('ic_user'),
   },
   {
-    title: 'Học sinh',
+    title: 'Sinh viên',
     path: '/students',
     icon: icon('ic_user'),
   },

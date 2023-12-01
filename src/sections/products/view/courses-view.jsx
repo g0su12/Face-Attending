@@ -159,7 +159,7 @@ export default function CoursePage() {
                 headLabel={[
                   { id: 'name', label: 'Tên khoá học' },
                   { id: 'id', label: 'Mã khoá học' },
-                  { id: 'teacher', label: 'Giáo viên' },
+                  { id: 'teacher', label: 'Giảng viên' },
                   { id: 'credits', label: 'Số tín chỉ' },
                   { id: '' },
                 ]}

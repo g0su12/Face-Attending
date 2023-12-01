@@ -53,7 +53,7 @@ export default function UserTableRow({
 
         <TableCell>{id}</TableCell>
 
-        <TableCell>{role === "student" ? "Học sinh" : "Giáo viên"}</TableCell>
+        <TableCell>{role === "student" ? "Sinh viên" : "Giảng viên"}</TableCell>
 
 
         <TableCell align="right">

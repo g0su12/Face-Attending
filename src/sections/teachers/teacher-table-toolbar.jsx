@@ -33,7 +33,7 @@ export default function CourseTableToolbar({ numSelected, filterName, onFilterNa
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Tìm giáo viên..."
+          placeholder="Tìm giảng viên..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify

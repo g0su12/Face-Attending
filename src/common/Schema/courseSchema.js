@@ -14,11 +14,11 @@ export const validate = values => {
   }
 
   if (values.students.length === 0) {
-    errors.students = 'Vui lòng chọn các học sinh sẽ tham gia lớp học';
+    errors.students = 'Vui lòng chọn các sinh viên sẽ tham gia lớp học';
   }
 
   if (!values.teacherId) {
-    errors.teacherId = 'Vui lòng chọn giáo viên cho lớp học';
+    errors.teacherId = 'Vui lòng chọn giảng viên cho lớp học';
   }
 
   return errors;

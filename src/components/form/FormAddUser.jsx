@@ -208,8 +208,8 @@ function FormAddUser({handleClose}) {
         <Grid item xs={12}>
           <FormLabel>Vai trò:</FormLabel>
           <RadioGroup row name="role" value={formik.values.role} onChange={formik.handleChange}>
-            <FormControlLabel value="teacher" control={<Radio/>} label="Giáo viên"/>
-            <FormControlLabel value="student" control={<Radio/>} label="Học sinh"/>
+            <FormControlLabel value="teacher" control={<Radio/>} label="Giảng viên"/>
+            <FormControlLabel value="student" control={<Radio/>} label="Sinh viên"/>
           </RadioGroup>
         </Grid>
         <Grid item xs={12}>
