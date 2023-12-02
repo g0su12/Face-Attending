@@ -1,16 +1,15 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Popover from '@mui/material/Popover';
-import {alpha} from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import {account} from 'src/_mock/account';
-import {useAuth} from "../../../AuthContext";
+import { useAuth } from '../../../AuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +28,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const {logout, personalInfo} = useAuth();
+  const { logout, personalInfo } = useAuth();
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -53,15 +52,15 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.photoURL}
-          alt={account.displayName}
+          src={'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'}
+          alt={'admin'}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {'Admin'}
         </Avatar>
       </IconButton>
 
@@ -69,8 +68,8 @@ export default function AccountPopover() {
         open={!!open}
         anchorEl={open}
         onClose={handleClose}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
-        transformOrigin={{vertical: 'top', horizontal: 'right'}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
           sx: {
             p: 0,
@@ -80,16 +79,16 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Box sx={{my: 1.5, px: 2}}>
+        <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
             {personalInfo.id}
           </Typography>
-          <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {personalInfo.email}
           </Typography>
         </Box>
 
-        <Divider sx={{borderStyle: 'dashed'}}/>
+        <Divider sx={{ borderStyle: 'dashed' }} />
 
         {MENU_OPTIONS.map((option) => (
           <MenuItem key={option.label} onClick={handleClose}>
@@ -97,13 +96,13 @@ export default function AccountPopover() {
           </MenuItem>
         ))}
 
-        <Divider sx={{borderStyle: 'dashed', m: 0}}/>
+        <Divider sx={{ borderStyle: 'dashed', m: 0 }} />
 
         <MenuItem
           disableRipple
           disableTouchRipple
           onClick={() => logout()}
-          sx={{typography: 'body2', color: 'error.main', py: 1.5}}
+          sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
           Đăng xuất
         </MenuItem>

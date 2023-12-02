@@ -16,7 +16,6 @@ import Iconify from 'src/components/iconify';
 import Searchbar from './common/searchbar';
 import {HEADER, NAV} from './config-layout';
 import AccountPopover from './common/account-popover';
-import LanguagePopover from './common/language-popover';
 import NotificationsPopover from './common/notifications-popover';
 import {getDatabase, onValue, ref} from "firebase/database";
 import {useEffect, useState} from "react";
