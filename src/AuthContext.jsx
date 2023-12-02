@@ -40,8 +40,11 @@ export function AuthProvider({ children }) {
           setPersonalInfo(snapshot.val());
         }
       });
+      // Store email and password in localStorage
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
     } catch (error) {
-      toast.warn('Your email or password is not correct!');
+      toast.warn('Email hoặc mật khẩu không chính xác!');
       navigate('/login');
     }
   }
@@ -49,8 +52,10 @@ export function AuthProvider({ children }) {
   async function logout() {
     try {
       await auth.signOut();
-      // Signed in
       navigate('/login');
+      // Remove email and password from localStorage
+      localStorage.removeItem('email');
+      localStorage.removeItem('password');
     } catch (error) {
       console.log(error);
     }
