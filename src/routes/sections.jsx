@@ -5,7 +5,6 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { OutGuard } from 'src/common/guards/OutGuard';
 import { PrivateRoute } from 'src/common/guards/AuthGuard';
 
-export const IndexPage = lazy(() => import('src/pages/app'));
 export const StudentPage = lazy(() => import('src/pages/student'));
 export const TeacherPage = lazy(() => import('src/pages/teacher'));
 export const StudentDetailPage = lazy(() => import('src/pages/studentDetail'));
