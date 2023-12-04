@@ -1,5 +1,5 @@
 export const columnsSession = [
-  {field: 'id', headerName: 'ID', width: 110},
+  {field: 'id', headerName: 'ID', width: 150},
   {field: 'courseName', headerName: 'Môn học', width: 150},
   {
     field: 'teacherName',

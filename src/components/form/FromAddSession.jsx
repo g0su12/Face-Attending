@@ -95,7 +95,7 @@ function FormAddSession({handleClose}) {
       sessionData.courseName = listCourses.find(course => course.id === sessionData.courseId).name;
       sessionData.teacherId = listCourses.find(course => course.id === sessionData.courseId).teacherId;
       sessionData.teacherName = listTeachers.find(teacher => teacher.id === sessionData.teacherId).name;
-
+      sessionData.id = `${sessionData.courseId}_${new Date().getTime()}`
       writeSessionData(sessionData);
       handleClose();
     },
@@ -167,17 +167,6 @@ function FormAddSession({handleClose}) {
             fullWidth
             error={formik.touched.endTime && Boolean(formik.errors.endTime)}
             helperText={formik.touched.endTime && formik.errors.endTime}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormLabel>Mã tiết học</FormLabel>
-          <TextField
-            name="id"
-            value={formik.values.id}
-            onChange={formik.handleChange}
-            fullWidth
-            error={formik.touched.id && Boolean(formik.errors.id)}
-            helperText={formik.touched.id && formik.errors.id}
           />
         </Grid>
         <Grid item xs={12}>
