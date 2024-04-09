@@ -43,9 +43,11 @@ export function AuthProvider({ children }) {
       // Store email and password in localStorage
       localStorage.setItem('email', email);
       localStorage.setItem('password', password);
+
+      return true;
     } catch (error) {
       toast.warn('Email hoặc mật khẩu không chính xác!');
-      navigate('/login');
+      return false;
     }
   }
 
@@ -75,6 +77,7 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    setLoading,
   };
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 }
